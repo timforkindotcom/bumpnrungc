@@ -136,7 +136,7 @@ export function HomeClient({ content }: HomeClientProps) {
       <ScorecardPopup
         isOpen={activeTab === "contact"}
         onClose={closeTab}
-        title="Contact"
+        title="Book Services"
         pageHref="/contact"
       >
         <ContactPopup contact={content.contact} />

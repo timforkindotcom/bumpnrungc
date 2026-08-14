@@ -28,7 +28,7 @@ export default function NotFound() {
           href="/contact"
           className="font-label text-xs uppercase tracking-[0.18em] text-cream/70 hover:text-cream"
         >
-          Contact
+          Book Services
         </Link>
       </div>
     </div>

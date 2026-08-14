@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Header } from "@/components/Header";
-import { SITE_TABS } from "@/lib/nav";
+import { SiteBottomNav } from "@/components/SiteBottomNav";
 import type { SiteContent } from "@/lib/content";
 import type { ReactNode } from "react";
 
@@ -40,29 +40,7 @@ export function ContentShell({
         </p>
       </div>
 
-      <nav
-        aria-label="Site"
-        className="relative z-20 border-t border-white/10 bg-forest px-2 py-2 pb-[max(0.5rem,env(safe-area-inset-bottom))]"
-      >
-        <div className="mx-auto grid max-w-2xl grid-cols-5 gap-1">
-          {SITE_TABS.map((tab) => {
-            const isActive = activeHref === tab.href;
-            return (
-              <Link
-                key={tab.id}
-                href={tab.href}
-                className={`font-label rounded-sm px-1.5 py-2 text-center text-[9px] uppercase tracking-[0.12em] sm:text-[11px] sm:tracking-[0.16em] ${
-                  isActive
-                    ? "bg-cream/15 text-cream"
-                    : "text-cream/55 hover:bg-white/5 hover:text-cream"
-                }`}
-              >
-                {tab.label}
-              </Link>
-            );
-          })}
-        </div>
-      </nav>
+      <SiteBottomNav activeHref={activeHref} />
       <footer className="bg-forest px-4 pb-5 pt-1 text-center">
         <Link
           href="/privacy"

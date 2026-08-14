@@ -6,7 +6,7 @@ import { ContactPopup } from "@/components/popups/ContactPopup";
 
 export async function generateMetadata(): Promise<Metadata> {
   return pageMetadata({
-    title: "Contact Bump N Run",
+    title: "Book Services",
     description:
       "Book mobile golf club repair or regripping in Brighton, MI and Southeast Michigan. Send a note — we'll come to you.",
     path: "/contact",
@@ -16,7 +16,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function ContactPage() {
   const content = await getSiteContent();
   return (
-    <ContentShell content={content} title="Contact" activeHref="/contact">
+    <ContentShell content={content} title="Book Services" activeHref="/contact">
       <ContactPopup contact={content.contact} />
     </ContentShell>
   );
