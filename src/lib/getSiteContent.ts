@@ -71,7 +71,7 @@ export const getSiteContent = cache(async (): Promise<SiteContent> => {
         }
       }`,
       {},
-      { next: { revalidate: 60 } },
+      { cache: "no-store" },
     );
 
     if (!data) {
