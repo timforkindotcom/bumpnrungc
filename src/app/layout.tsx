@@ -4,6 +4,9 @@ import "./globals.css";
 import { getSiteContent } from "@/lib/getSiteContent";
 import { getSiteUrl, localBusinessJsonLd } from "@/lib/site";
 
+/** Recheck Sanity copy about once a minute so Publish shows on the live site. */
+export const revalidate = 60;
+
 export async function generateMetadata(): Promise<Metadata> {
   const content = await getSiteContent();
   return {
