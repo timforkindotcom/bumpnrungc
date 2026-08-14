@@ -37,6 +37,7 @@ export function ScorecardPopup({
             aria-modal="true"
             aria-label={title}
             className="scorecard-texture fixed left-1/2 top-1/2 z-40 w-[min(92vw,420px)] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-[2px] border border-fairway/35 shadow-[0_24px_64px_rgba(10,61,44,0.45)]"
+            onPointerDown={(event) => event.stopPropagation()}
             initial={{ opacity: 0, y: 32, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.98 }}

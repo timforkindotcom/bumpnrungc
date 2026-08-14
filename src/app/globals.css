@@ -138,6 +138,8 @@ body {
   min-height: 28px;
   line-height: 28px;
   color: var(--color-ink);
+  caret-color: var(--color-ink);
+  pointer-events: auto;
   font-family: var(--font-body), Georgia, serif;
 }
 

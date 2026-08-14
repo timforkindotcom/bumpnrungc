@@ -82,6 +82,51 @@ declare global {
 
 const UNITY_BASE = "/unity";
 
+/**
+ * Unity WebGL, by default, swallows every key on the page. That blocks the
+ * Contact form. Skip Unity's keyboard listeners when the user is in an input.
+ */
+function patchKeyboardForHtmlForms() {
+  if (typeof window === "undefined") return;
+  const w = window as Window & { __bnrKeyPatch?: boolean };
+  if (w.__bnrKeyPatch) return;
+  w.__bnrKeyPatch = true;
+
+  const orig = EventTarget.prototype.addEventListener;
+  EventTarget.prototype.addEventListener = function (
+    this: EventTarget,
+    type: string,
+    listener: EventListenerOrEventListenerObject,
+    options?: boolean | AddEventListenerOptions,
+  ) {
+    if (
+      (type === "keydown" || type === "keypress" || type === "keyup") &&
+      typeof listener === "function"
+    ) {
+      const wrapped: EventListener = (event) => {
+        const t = event.target;
+        if (t instanceof HTMLElement) {
+          const tag = t.tagName;
+          if (
+            tag === "INPUT" ||
+            tag === "TEXTAREA" ||
+            tag === "SELECT" ||
+            t.isContentEditable
+          ) {
+            return;
+          }
+        }
+        listener.call(this, event);
+      };
+      orig.call(this, type, wrapped, options);
+      return;
+    }
+    orig.call(this, type, listener, options);
+  };
+}
+
+patchKeyboardForHtmlForms();
+
 /** Survives React Strict Mode remounts — only one Unity boot at a time. */
 type SharedBoot = {
   key: string;

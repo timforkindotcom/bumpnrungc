@@ -78,8 +78,10 @@ export function HomeClient({ content }: HomeClientProps) {
     };
   }, []);
 
-  return (
-    <main className="relative flex h-[var(--bnr-app-height,100dvh)] flex-col overflow-hidden bg-[#0a1620]">
+  useEffect(() => {
+    if (!activeTab) return;
+    document.getElementById("unity-canvas")?.blur();
+  }, [activeTab]);
       <Header
         businessName={content.businessName}
         subheader={content.subheader}
@@ -87,7 +89,11 @@ export function HomeClient({ content }: HomeClientProps) {
       />
 
       {/* Fills the space between header and tabs. Unity canvas is sized to this box. */}
-      <div className="game-frame relative mx-auto min-h-0 w-full flex-1 overflow-hidden">
+      <div
+        className={`game-frame relative mx-auto min-h-0 w-full flex-1 overflow-hidden ${
+          activeTab ? "pointer-events-none" : ""
+        }`}
+      >
         <UnityGame />
       </div>
 
