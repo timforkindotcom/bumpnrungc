@@ -54,6 +54,7 @@ export default async function RootLayout({
         <link rel="stylesheet" href="https://use.typekit.net/nma7fmi.css" />
       </head>
       <body className="h-full antialiased font-body">
+        <Script src="/bnr-keyboard.js" strategy="beforeInteractive" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

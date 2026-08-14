@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { NotepadBlank, NotepadParagraph, NotepadRow } from "@/components/NotepadLines";
 
 type ContactPopupProps = {
@@ -13,9 +13,84 @@ type ContactPopupProps = {
   };
 };
 
+function isContactField(
+  el: EventTarget | null,
+): el is HTMLInputElement | HTMLTextAreaElement {
+  return (
+    (el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement) &&
+    el.classList.contains("vintage-input")
+  );
+}
+
+function typeIntoField(
+  el: HTMLInputElement | HTMLTextAreaElement,
+  event: KeyboardEvent,
+) {
+  if (event.metaKey || event.ctrlKey || event.altKey) return false;
+  if (el.disabled || el.readOnly) return false;
+
+  const start = el.selectionStart ?? el.value.length;
+  const end = el.selectionEnd ?? el.value.length;
+
+  if (event.key === "Backspace") {
+    if (start !== end) {
+      el.value = el.value.slice(0, start) + el.value.slice(end);
+      el.setSelectionRange(start, start);
+    } else if (start > 0) {
+      el.value = el.value.slice(0, start - 1) + el.value.slice(start);
+      el.setSelectionRange(start - 1, start - 1);
+    }
+    return true;
+  }
+
+  if (event.key === "Delete") {
+    if (start !== end) {
+      el.value = el.value.slice(0, start) + el.value.slice(end);
+      el.setSelectionRange(start, start);
+    } else {
+      el.value = el.value.slice(0, start) + el.value.slice(start + 1);
+      el.setSelectionRange(start, start);
+    }
+    return true;
+  }
+
+  if (event.key.length === 1) {
+    el.value = el.value.slice(0, start) + event.key + el.value.slice(end);
+    el.setSelectionRange(start + 1, start + 1);
+    return true;
+  }
+
+  return false;
+}
+
 export function ContactPopup({ contact }: ContactPopupProps) {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [message, setMessage] = useState("");
+
+  useEffect(() => {
+    const first = document.querySelector<HTMLInputElement>("form .vintage-input");
+    first?.focus();
+  }, []);
+
+  // If Unity already ate the key (preventDefault), type it into the field ourselves.
+  useEffect(() => {
+    const onKeyDown = (event: Event) => {
+      const keyEvent = event as KeyboardEvent;
+      if (!isContactField(keyEvent.target)) return;
+      if (!keyEvent.defaultPrevented) return;
+      if (!typeIntoField(keyEvent.target, keyEvent)) return;
+      keyEvent.target.dispatchEvent(new Event("input", { bubbles: true }));
+    };
+
+    const add =
+      window.__bnrOrigAdd ?? EventTarget.prototype.addEventListener;
+    const remove =
+      window.__bnrOrigRemove ?? EventTarget.prototype.removeEventListener;
+    add.call(window, "keydown", onKeyDown, true);
+    return () => {
+      remove.call(window, "keydown", onKeyDown, true);
+    };
+  }, []);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();

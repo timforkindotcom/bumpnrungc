@@ -77,6 +77,9 @@ type CreateUnityInstanceFn = (
 declare global {
   interface Window {
     createUnityInstance?: CreateUnityInstanceFn;
+    __bnrKeyPatch?: boolean;
+    __bnrOrigAdd?: typeof EventTarget.prototype.addEventListener;
+    __bnrOrigRemove?: typeof EventTarget.prototype.removeEventListener;
   }
 }
 
@@ -88,11 +91,13 @@ const UNITY_BASE = "/unity";
  */
 function patchKeyboardForHtmlForms() {
   if (typeof window === "undefined") return;
-  const w = window as Window & { __bnrKeyPatch?: boolean };
-  if (w.__bnrKeyPatch) return;
-  w.__bnrKeyPatch = true;
+  if (window.__bnrKeyPatch) return;
+  window.__bnrKeyPatch = true;
 
   const orig = EventTarget.prototype.addEventListener;
+  window.__bnrOrigAdd = orig;
+  window.__bnrOrigRemove = EventTarget.prototype.removeEventListener;
+
   EventTarget.prototype.addEventListener = function (
     this: EventTarget,
     type: string,

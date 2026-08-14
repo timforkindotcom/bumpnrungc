@@ -82,6 +82,9 @@ export function HomeClient({ content }: HomeClientProps) {
     if (!activeTab) return;
     document.getElementById("unity-canvas")?.blur();
   }, [activeTab]);
+
+  return (
+    <main className="relative flex h-[var(--bnr-app-height,100dvh)] flex-col overflow-hidden bg-[#0a1620]">
       <Header
         businessName={content.businessName}
         subheader={content.subheader}
