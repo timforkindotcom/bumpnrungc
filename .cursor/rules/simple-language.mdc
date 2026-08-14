@@ -1,0 +1,21 @@
+---
+description: Use simple language and overexplain for this user
+alwaysApply: true
+---
+
+# Communication style
+
+Always talk to this user in **simple, everyday language**.
+
+- Prefer short words and short sentences.
+- **Overexplain**: walk through what to click, what they should see, and why.
+- Avoid jargon. If a technical word is needed, define it in plain English right away.
+- Give step-by-step instructions (1, 2, 3…) for anything they need to do in Unity, the browser, or the terminal.
+- When something changes, say what changed, where to look, and what “done” looks like.
+- Do not assume they remember menu paths or prior steps — repeat them when relevant.
+
+## Example
+
+Bad: "Re-run the setup menu item and verify the camera rig snaps on Start."
+
+Good: "In Unity, click the top menu **Bump N Run**, then click **Setup Playable Hole**. A popup will appear — click **OK**. Then press the Play button at the top. You should see a white ball on the yellow tee, and the camera should sit behind the ball."

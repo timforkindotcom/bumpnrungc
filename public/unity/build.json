@@ -1,0 +1,8 @@
+{
+  "prefix": "unity",
+  "loader": "Build/unity.loader.js",
+  "assetExt": ".unityweb",
+  "gzip": false,
+  "v": "1786707752",
+  "sizeMb": 78
+}
