@@ -12,7 +12,7 @@ export function Header({ businessName, subheader, home = false }: HeaderProps) {
   if (!hasText(businessName) && !hasText(subheader)) return null;
 
   const nameClass =
-    "font-display text-[2.5rem] leading-none tracking-[0.02em] text-cream sm:text-[3rem]";
+    "font-display whitespace-nowrap text-[1.85rem] leading-none tracking-[0.02em] text-cream sm:text-[3rem]";
 
   return (
     <header className="header-plate relative z-10 shrink-0 border-b border-white/10 px-3 py-3 text-center sm:py-3.5">
@@ -28,7 +28,7 @@ export function Header({ businessName, subheader, home = false }: HeaderProps) {
         )
       ) : null}
       {hasText(subheader) ? (
-        <p className="font-display mt-2 text-xl leading-none text-cream/75 sm:text-2xl">
+        <p className="font-display mt-2 whitespace-nowrap text-base leading-none text-cream/75 sm:text-2xl">
           {subheader}
         </p>
       ) : null}
