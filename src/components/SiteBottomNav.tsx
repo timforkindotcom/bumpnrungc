@@ -73,13 +73,21 @@ export function SiteBottomNav({
       aria-label="Site"
       className="relative z-20 border-t border-white/10 bg-forest px-2 py-2 pb-[max(0.5rem,env(safe-area-inset-bottom))]"
     >
-      <div className="mx-auto grid max-w-2xl grid-cols-[1fr_auto_1fr] items-center gap-1">
-        <div className="flex items-center justify-end gap-1">
-          {left.map(renderTab)}
+      <div className="mx-auto grid max-w-2xl grid-cols-[1fr_auto_1fr] items-center">
+        <div className="grid grid-cols-2 items-center">
+          {left.map((tab) => (
+            <div key={tab.id} className="flex min-w-0 justify-center">
+              {renderTab(tab)}
+            </div>
+          ))}
         </div>
-        <div className="flex justify-center">{featured ? renderTab(featured) : null}</div>
-        <div className="flex items-center justify-start gap-1">
-          {right.map(renderTab)}
+        <div className="flex justify-center px-1">{featured ? renderTab(featured) : null}</div>
+        <div className="grid grid-cols-2 items-center">
+          {right.map((tab) => (
+            <div key={tab.id} className="flex min-w-0 justify-center">
+              {renderTab(tab)}
+            </div>
+          ))}
         </div>
       </div>
     </nav>

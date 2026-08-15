@@ -11,10 +11,10 @@ import {
 } from "@/lib/content";
 
 export const SITE_TABS = [
-  { id: "location", href: "/location" },
+  { id: "services", href: "/services" },
   { id: "about", href: "/about" },
   { id: "contact", href: "/contact", featured: true },
-  { id: "services", href: "/services" },
+  { id: "location", href: "/location" },
   { id: "merch", href: "/merch" },
 ] as const;
 
@@ -30,11 +30,12 @@ export type VisibleTab = {
 export function getVisibleTabs(content: SiteContent): VisibleTab[] {
   const tabs: VisibleTab[] = [];
 
-  if (hasLocation(content) && hasText(content.location.title)) {
+  const servicesLabel = servicesTitle(content);
+  if (hasServices(content) && hasText(servicesLabel)) {
     tabs.push({
-      id: "location",
-      href: "/location",
-      label: content.location.title,
+      id: "services",
+      href: "/services",
+      label: servicesLabel,
     });
   }
 
@@ -56,12 +57,11 @@ export function getVisibleTabs(content: SiteContent): VisibleTab[] {
     });
   }
 
-  const servicesLabel = servicesTitle(content);
-  if (hasServices(content) && hasText(servicesLabel)) {
+  if (hasLocation(content) && hasText(content.location.title)) {
     tabs.push({
-      id: "services",
-      href: "/services",
-      label: servicesLabel,
+      id: "location",
+      href: "/location",
+      label: content.location.title,
     });
   }
 
