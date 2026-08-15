@@ -11,8 +11,8 @@ import {
 } from "@/lib/content";
 
 export const SITE_TABS = [
-  { id: "services", href: "/services" },
   { id: "about", href: "/about" },
+  { id: "services", href: "/services" },
   { id: "contact", href: "/contact", featured: true },
   { id: "location", href: "/location" },
   { id: "merch", href: "/merch" },
@@ -30,20 +30,20 @@ export type VisibleTab = {
 export function getVisibleTabs(content: SiteContent): VisibleTab[] {
   const tabs: VisibleTab[] = [];
 
+  if (hasAbout(content) && hasText(content.about.title)) {
+    tabs.push({
+      id: "about",
+      href: "/about",
+      label: content.about.title,
+    });
+  }
+
   const servicesLabel = servicesTitle(content);
   if (hasServices(content) && hasText(servicesLabel)) {
     tabs.push({
       id: "services",
       href: "/services",
       label: servicesLabel,
-    });
-  }
-
-  if (hasAbout(content) && hasText(content.about.title)) {
-    tabs.push({
-      id: "about",
-      href: "/about",
-      label: content.about.title,
     });
   }
 
