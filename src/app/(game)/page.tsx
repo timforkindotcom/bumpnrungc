@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { getSiteContent } from "@/lib/getSiteContent";
 import { HomeClient } from "@/components/HomeClient";
-import { getSiteUrl } from "@/lib/site";
+import { getSiteUrl, shareImages } from "@/lib/site";
 
 export async function generateMetadata(): Promise<Metadata> {
   const content = await getSiteContent();
@@ -14,6 +14,11 @@ export async function generateMetadata(): Promise<Metadata> {
       description: content.seoDescription,
       url: getSiteUrl(),
       type: "website",
+      images: shareImages(),
+    },
+    twitter: {
+      card: "summary_large_image" as const,
+      images: ["/og.png"],
     },
   };
 }

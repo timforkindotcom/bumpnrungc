@@ -3,6 +3,20 @@ import { hasText, type SiteContent } from "@/lib/content";
 
 export const LIVE_SITE_URL = "https://bumpnrungc.com";
 
+export const SHARE_IMAGE_ALT =
+  "Bump N Run Golf Club — mobile repair services for Michigan golfers";
+
+export function shareImages() {
+  return [
+    {
+      url: "/og.png",
+      width: 1200,
+      height: 630,
+      alt: SHARE_IMAGE_ALT,
+    },
+  ];
+}
+
 /** Live site URL. Set NEXT_PUBLIC_SITE_URL on Vercel to lock it in. */
 export function getSiteUrl(): string {
   const fromEnv = process.env.NEXT_PUBLIC_SITE_URL?.trim();
@@ -30,6 +44,11 @@ export function pageMetadata(opts: {
     openGraph: {
       url,
       type: "website",
+      images: shareImages(),
+    },
+    twitter: {
+      card: "summary_large_image",
+      images: ["/og.png"],
     },
   };
   if (hasText(opts.title)) {
@@ -64,6 +83,8 @@ export function localBusinessJsonLd(content: SiteContent) {
     "@id": `${url}/#business`,
     url,
   };
+
+  jsonLd.image = `${url}/og.png`;
 
   if (hasText(content.businessName)) jsonLd.name = content.businessName;
   if (hasText(content.seoDescription)) jsonLd.description = content.seoDescription;

@@ -3,7 +3,7 @@ import Script from "next/script";
 import "./globals.css";
 import { hasText } from "@/lib/content";
 import { getSiteContent } from "@/lib/getSiteContent";
-import { getSiteUrl, localBusinessJsonLd } from "@/lib/site";
+import { getSiteUrl, localBusinessJsonLd, shareImages } from "@/lib/site";
 
 /** Pull fresh Sanity copy on each visit so Publish shows right away. */
 export const dynamic = "force-dynamic";
@@ -35,6 +35,7 @@ export async function generateMetadata(): Promise<Metadata> {
   metadata.openGraph = {
     type: "website",
     locale: "en_US",
+    images: shareImages(),
     ...(hasText(content.businessName) ? { siteName: content.businessName } : {}),
     ...(hasText(content.seoTitle) ? { title: content.seoTitle } : {}),
     ...(hasText(content.seoDescription)
@@ -43,6 +44,7 @@ export async function generateMetadata(): Promise<Metadata> {
   };
   metadata.twitter = {
     card: "summary_large_image",
+    images: ["/og.png"],
     ...(hasText(content.seoTitle) ? { title: content.seoTitle } : {}),
     ...(hasText(content.seoDescription)
       ? { description: content.seoDescription }
