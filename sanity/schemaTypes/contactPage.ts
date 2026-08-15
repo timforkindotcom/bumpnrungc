@@ -5,6 +5,7 @@ export const contactPage = defineType({
   title: "Contact Page",
   type: "document",
   fields: [
+    defineField({ name: "title", title: "Title", type: "string" }),
     defineField({ name: "intro", title: "Intro", type: "text" }),
     defineField({ name: "phone", title: "Phone", type: "string" }),
     defineField({ name: "email", title: "Email", type: "string" }),

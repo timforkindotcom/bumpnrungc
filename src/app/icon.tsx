@@ -1,9 +1,14 @@
 import { ImageResponse } from "next/og";
+import { getSiteContent } from "@/lib/getSiteContent";
 
 export const size = { width: 32, height: 32 };
 export const contentType = "image/png";
+export const dynamic = "force-dynamic";
 
-export default function Icon() {
+export default async function Icon() {
+  const content = await getSiteContent();
+  const letter = content.businessName.trim().charAt(0);
+
   return new ImageResponse(
     (
       <div
@@ -19,7 +24,7 @@ export default function Icon() {
           fontWeight: 700,
         }}
       >
-        B
+        {letter}
       </div>
     ),
     { ...size },

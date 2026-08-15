@@ -14,7 +14,9 @@ export function LocationPopup({ content, phone, email }: LocationPopupProps) {
   return (
     <div className="notepad-block">
       <NotepadParagraph text={content.body} />
-      <NotepadRow className="italic text-ink-muted">{content.serviceArea}</NotepadRow>
+      {content.serviceArea ? (
+        <NotepadRow className="italic text-ink-muted">{content.serviceArea}</NotepadRow>
+      ) : null}
       {(phone || email) && (
         <>
           <NotepadBlank />
@@ -36,10 +38,6 @@ export function LocationPopup({ content, phone, email }: LocationPopupProps) {
           ) : null}
         </>
       )}
-      <NotepadBlank />
-      <NotepadRow className="font-label text-xs uppercase tracking-[0.16em] text-ink-muted">
-        Mobile trailer · Brighton, MI · and beyond
-      </NotepadRow>
     </div>
   );
 }

@@ -1,22 +1,31 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { getSiteContent } from "@/lib/getSiteContent";
-import { pageMetadata } from "@/lib/site";
+import { contactTitle, hasContact } from "@/lib/content";
+import { sanityPageMetadata } from "@/lib/site";
 import { ContentShell } from "@/components/ContentShell";
 import { ContactPopup } from "@/components/popups/ContactPopup";
 
 export async function generateMetadata(): Promise<Metadata> {
-  return pageMetadata({
-    title: "Book Services",
-    description:
-      "Book mobile golf club repair or regripping in Brighton, MI and Southeast Michigan. Send a note — we'll come to you.",
-    path: "/contact",
-  });
+  const content = await getSiteContent();
+  return sanityPageMetadata(
+    content,
+    contactTitle(content),
+    content.contact.intro,
+    "/contact",
+  );
 }
 
 export default async function ContactPage() {
   const content = await getSiteContent();
+  if (!hasContact(content)) notFound();
+
   return (
-    <ContentShell content={content} title="Book Services" activeHref="/contact">
+    <ContentShell
+      content={content}
+      title={contactTitle(content)}
+      activeHref="/contact"
+    >
       <ContactPopup contact={content.contact} />
     </ContentShell>
   );

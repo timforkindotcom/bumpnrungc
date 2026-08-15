@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { hasText } from "@/lib/content";
 
 type HeaderProps = {
   businessName: string;
@@ -8,23 +9,29 @@ type HeaderProps = {
 };
 
 export function Header({ businessName, subheader, home = false }: HeaderProps) {
+  if (!hasText(businessName) && !hasText(subheader)) return null;
+
   const nameClass =
-    "font-display text-xl tracking-[0.02em] text-cream sm:text-2xl";
+    "font-display text-[2.5rem] leading-none tracking-[0.02em] text-cream sm:text-[3rem]";
 
   return (
-    <header className="header-plate relative z-10 shrink-0 border-b border-white/10 px-3 py-2 text-center sm:py-2.5">
-      {home ? (
-        <h1 className={nameClass}>{businessName}</h1>
-      ) : (
-        <p className={nameClass}>
-          <Link href="/" className="hover:text-gold">
-            {businessName}
-          </Link>
+    <header className="header-plate relative z-10 shrink-0 border-b border-white/10 px-3 py-3 text-center sm:py-3.5">
+      {hasText(businessName) ? (
+        home ? (
+          <h1 className={nameClass}>{businessName}</h1>
+        ) : (
+          <p className={nameClass}>
+            <Link href="/" className="hover:text-gold">
+              {businessName}
+            </Link>
+          </p>
+        )
+      ) : null}
+      {hasText(subheader) ? (
+        <p className="font-display mt-2 text-xl leading-none text-cream/75 sm:text-2xl">
+          {subheader}
         </p>
-      )}
-      <p className="font-label text-[9px] uppercase tracking-[0.22em] text-cream/75 sm:text-[10px]">
-        {subheader}
-      </p>
+      ) : null}
     </header>
   );
 }

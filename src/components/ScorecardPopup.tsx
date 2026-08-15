@@ -36,7 +36,7 @@ export function ScorecardPopup({
             role="dialog"
             aria-modal="true"
             aria-label={title}
-            className="scorecard-texture fixed left-1/2 top-1/2 z-40 w-[min(92vw,420px)] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-[2px] border border-fairway/35 shadow-[0_24px_64px_rgba(10,61,44,0.45)]"
+            className="scorecard-texture fixed left-1/2 top-1/2 z-40 w-[min(92vw,420px)] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-xl border border-white/10 shadow-[0_24px_64px_rgba(10,61,44,0.45)]"
             onPointerDown={(event) => event.stopPropagation()}
             initial={{ opacity: 0, y: 32, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -48,10 +48,10 @@ export function ScorecardPopup({
                 {title}
               </p>
             </div>
-            <div className="notepad-block max-h-[min(58vh,520px)] overflow-y-auto px-5 py-3 text-ink">
+            <div className="notepad-block max-h-[min(58vh,520px)] overflow-y-auto px-5 py-5 text-ink">
               {children}
             </div>
-            <div className="flex items-center justify-between border-t border-fairway/20 bg-parchment/80 px-4 py-2">
+            <div className="flex items-center justify-between border-t border-fairway/15 bg-parchment-light px-4 py-3">
               {pageHref ? (
                 <Link
                   href={pageHref}

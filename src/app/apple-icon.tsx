@@ -1,9 +1,14 @@
 import { ImageResponse } from "next/og";
+import { getSiteContent } from "@/lib/getSiteContent";
 
 export const size = { width: 180, height: 180 };
 export const contentType = "image/png";
+export const dynamic = "force-dynamic";
 
-export default function AppleIcon() {
+export default async function AppleIcon() {
+  const content = await getSiteContent();
+  const letter = content.businessName.trim().charAt(0);
+
   return new ImageResponse(
     (
       <div
@@ -19,7 +24,7 @@ export default function AppleIcon() {
           fontWeight: 700,
         }}
       >
-        B
+        {letter}
       </div>
     ),
     { ...size },

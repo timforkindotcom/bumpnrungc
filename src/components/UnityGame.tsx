@@ -612,7 +612,7 @@ export function UnityGame() {
     <div ref={hostRef} className="absolute inset-0 overflow-hidden bg-black">
       {!ready && !missing && !error && (
         <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-3 bg-forest/92 px-6">
-          <p className="font-label text-sm uppercase tracking-[0.2em] text-cream/85">
+          <p className="font-label text-base uppercase text-cream/85">
             One moment…
           </p>
           <div className="h-1.5 w-[min(280px,70vw)] overflow-hidden rounded-full bg-white/10">
@@ -621,8 +621,8 @@ export function UnityGame() {
               style={{ width: `${pct}%` }}
             />
           </div>
-          <p className="text-xs text-cream/50">{pct}%</p>
-          <p className="max-w-sm text-center text-xs leading-relaxed text-cream/60">
+          <p className="text-sm text-cream/50">{pct}%</p>
+          <p className="max-w-sm text-center text-base leading-relaxed text-cream/60">
             {status}
           </p>
           {stalled && (
@@ -645,7 +645,7 @@ export function UnityGame() {
       {missing && (
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-forest px-6 text-center">
           <p className="font-label text-lg text-cream">Almost ready</p>
-          <p className="max-w-md text-sm leading-relaxed text-cream/70">
+          <p className="max-w-md text-lg leading-relaxed text-cream/70">
             In Unity, click{" "}
             <span className="text-cream">Bump N Run → Build WebGL For Site</span>, wait for
             it to finish, then refresh this page.

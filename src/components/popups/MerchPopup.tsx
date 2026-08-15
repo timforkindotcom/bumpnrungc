@@ -12,10 +12,14 @@ export function MerchPopup({ merch }: MerchPopupProps) {
   return (
     <div className="notepad-block text-center">
       <NotepadParagraph text={merch.body} />
-      <NotepadBlank />
-      <NotepadRow className="font-label text-center uppercase tracking-[0.2em] text-fairway">
-        {merch.comingSoon}
-      </NotepadRow>
+      {merch.comingSoon ? (
+        <>
+          <NotepadBlank />
+          <NotepadRow className="font-label text-center uppercase tracking-[0.2em] text-fairway">
+            {merch.comingSoon}
+          </NotepadRow>
+        </>
+      ) : null}
     </div>
   );
 }

@@ -14,10 +14,10 @@
   --color-parchment-light: #faf7f0;
   --color-cream: #f5f8f4;
   --color-gold: #c4a35a;
-  /* Typekit: Spaghetti Western + Spirits (loaded in layout) */
+  /* Typekit: Spaghetti Western + Clarendon Text Pro (loaded in layout) */
   --font-display: "cc-spaghetti-western-script", "cc-spaghetti-western-sans", Georgia, serif;
-  --font-label: "spirits-sharp", "spirits-soft", "spirits-neutral", system-ui, sans-serif;
-  --font-body: "spirits-soft", "spirits-neutral", Georgia, serif;
+  --font-label: "clarendon-text-pro", Georgia, serif;
+  --font-body: "clarendon-text-pro", Georgia, serif;
 }
 
 html,
@@ -27,15 +27,30 @@ body {
 }
 
 body {
-  background: #0a3d2c;
+  background-color: #0a3d2c;
+  background-image: var(--bnr-grain);
+  background-size: 420px 420px;
+  background-blend-mode: overlay;
   color: var(--color-cream);
   font-family: var(--font-body), Georgia, serif;
+  font-size: 1.125rem;
+  letter-spacing: 0;
+  word-spacing: normal;
+}
+
+/* Fine grit over the greens — felt / turf, not notepad lines. */
+:root {
+  --bnr-grain: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.15' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='0.72'/%3E%3C/svg%3E");
 }
 
 .site-shell {
-  background:
+  background-color: #0a3d2c;
+  background-image:
+    var(--bnr-grain),
     radial-gradient(ellipse at 50% 0%, rgba(26, 122, 86, 0.28), transparent 55%),
     linear-gradient(180deg, #0a3d2c 0%, #062820 100%);
+  background-size: 420px 420px, auto, auto;
+  background-blend-mode: overlay, normal, normal;
 }
 
 .game-frame {
@@ -57,56 +72,54 @@ body {
 
 .scorecard-texture {
   background-color: var(--color-parchment-light);
-  background-image:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.4) 0%, transparent 18%),
-    url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.45),
-    0 12px 40px rgba(10, 61, 44, 0.35);
+  box-shadow: 0 12px 40px rgba(10, 61, 44, 0.35);
 }
 
-/* Single-line notepad row */
 .notepad-line {
-  min-height: 28px;
-  line-height: 28px;
-  border-bottom: 1px solid rgba(13, 59, 42, 0.14);
   color: var(--color-ink);
   font-family: var(--font-body), Georgia, serif;
+  letter-spacing: 0;
+  word-spacing: normal;
+  line-height: 1.5;
 }
 
 .notepad-line-blank {
-  min-height: 28px;
-  border-bottom: 1px solid rgba(13, 59, 42, 0.1);
+  height: 0.75rem;
+  border: none;
 }
 
-/* Multi-line copy: lines stick to the text as it wraps / scrolls */
 .notepad-paragraph {
-  margin: 0;
-  line-height: 28px;
+  margin: 0 0 0.85rem;
+  line-height: 1.55;
   color: var(--color-ink);
   font-family: var(--font-body), Georgia, serif;
-  background-image: repeating-linear-gradient(
-    transparent,
-    transparent 27px,
-    rgba(13, 59, 42, 0.14) 27px,
-    rgba(13, 59, 42, 0.14) 28px
-  );
-  background-attachment: local;
-  background-origin: content-box;
+  letter-spacing: 0;
+  word-spacing: normal;
 }
 
 .notepad-block {
   display: flex;
   flex-direction: column;
+  gap: 0.35rem;
 }
 
 .header-plate {
-  background:
+  background-image:
+    var(--bnr-grain),
     linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0%, transparent 45%),
     linear-gradient(180deg, #1a7a56 0%, #006747 55%, #0a3d2c 100%);
+  background-size: 420px 420px, auto, auto;
+  background-blend-mode: overlay, normal, normal;
   box-shadow:
     inset 0 -1px 0 rgba(196, 163, 90, 0.22),
     0 2px 12px rgba(0, 0, 0, 0.2);
+}
+
+.bg-forest {
+  background-color: #0a3d2c;
+  background-image: var(--bnr-grain);
+  background-size: 420px 420px;
+  background-blend-mode: overlay;
 }
 
 .letterpress {
@@ -130,13 +143,12 @@ body {
 }
 
 .vintage-input {
-  background: transparent;
-  border: none;
-  border-bottom: 1px solid rgba(13, 59, 42, 0.28);
-  border-radius: 0;
-  padding: 0.35rem 0;
-  min-height: 28px;
-  line-height: 28px;
+  background: #fff;
+  border: 1px solid rgba(13, 59, 42, 0.2);
+  border-radius: 8px;
+  padding: 0.55rem 0.75rem;
+  min-height: 42px;
+  line-height: 1.4;
   color: var(--color-ink);
   caret-color: var(--color-ink);
   pointer-events: auto;
@@ -145,7 +157,7 @@ body {
 
 .vintage-input:focus {
   outline: none;
-  border-bottom-color: var(--color-fairway);
+  border-color: var(--color-fairway);
 }
 
 .vintage-input::placeholder {
@@ -157,7 +169,14 @@ body {
 }
 
 .font-label {
-  font-family: var(--font-label), system-ui, sans-serif;
+  font-family: var(--font-label), Georgia, serif;
+  letter-spacing: 0.04em;
+  word-spacing: normal;
+}
+
+/* Beat leftover tracking-* classes so words sit next to each other. */
+.font-label[class*="tracking-"] {
+  letter-spacing: 0.04em !important;
 }
 
 .font-body {

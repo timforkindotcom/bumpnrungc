@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Script from "next/script";
 import "./globals.css";
+import { hasText } from "@/lib/content";
 import { getSiteContent } from "@/lib/getSiteContent";
 import { getSiteUrl, localBusinessJsonLd } from "@/lib/site";
 
@@ -9,32 +10,46 @@ export const dynamic = "force-dynamic";
 
 export async function generateMetadata(): Promise<Metadata> {
   const content = await getSiteContent();
-  return {
+  const defaultTitle = content.seoTitle || content.businessName;
+  const metadata: Metadata = {
     metadataBase: new URL(getSiteUrl()),
-    title: {
-      default: content.seoTitle,
-      template: "%s | Bump N Run Golf Club",
-    },
-    description: content.seoDescription,
-    applicationName: content.businessName,
-    authors: [{ name: content.businessName }],
-    openGraph: {
-      type: "website",
-      locale: "en_US",
-      siteName: content.businessName,
-      title: content.seoTitle,
-      description: content.seoDescription,
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: content.seoTitle,
-      description: content.seoDescription,
-    },
     robots: {
       index: true,
       follow: true,
     },
   };
+
+  if (hasText(defaultTitle)) {
+    metadata.title = hasText(content.businessName)
+      ? { default: defaultTitle, template: `%s | ${content.businessName}` }
+      : defaultTitle;
+  }
+  if (hasText(content.seoDescription)) {
+    metadata.description = content.seoDescription;
+  }
+  if (hasText(content.businessName)) {
+    metadata.applicationName = content.businessName;
+    metadata.authors = [{ name: content.businessName }];
+  }
+
+  metadata.openGraph = {
+    type: "website",
+    locale: "en_US",
+    ...(hasText(content.businessName) ? { siteName: content.businessName } : {}),
+    ...(hasText(content.seoTitle) ? { title: content.seoTitle } : {}),
+    ...(hasText(content.seoDescription)
+      ? { description: content.seoDescription }
+      : {}),
+  };
+  metadata.twitter = {
+    card: "summary_large_image",
+    ...(hasText(content.seoTitle) ? { title: content.seoTitle } : {}),
+    ...(hasText(content.seoDescription)
+      ? { description: content.seoDescription }
+      : {}),
+  };
+
+  return metadata;
 }
 
 export default async function RootLayout({
@@ -53,7 +68,7 @@ export default async function RootLayout({
   return (
     <html lang="en" className="h-full">
       <head>
-        {/* Spirits + Spaghetti Western (Adobe Fonts / Typekit) */}
+        {/* Clarendon Text Pro + Spaghetti Western (Adobe Fonts / Typekit) */}
         <link rel="stylesheet" href="https://use.typekit.net/nma7fmi.css" />
       </head>
       <body className="h-full antialiased font-body">

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import type { SiteContent } from "@/lib/content";
+import { hasText, type SiteContent } from "@/lib/content";
 
 export const LIVE_SITE_URL = "https://bumpnrungc.com";
 
@@ -25,17 +25,35 @@ export function pageMetadata(opts: {
   path: string;
 }): Metadata {
   const url = `${getSiteUrl()}${opts.path}`;
-  return {
-    title: opts.title,
-    description: opts.description,
+  const metadata: Metadata = {
     alternates: { canonical: opts.path },
     openGraph: {
-      title: opts.title,
-      description: opts.description,
       url,
       type: "website",
     },
   };
+  if (hasText(opts.title)) {
+    metadata.title = opts.title;
+    metadata.openGraph = { ...metadata.openGraph, title: opts.title };
+  }
+  if (hasText(opts.description)) {
+    metadata.description = opts.description;
+    metadata.openGraph = { ...metadata.openGraph, description: opts.description };
+  }
+  return metadata;
+}
+
+export function sanityPageMetadata(
+  content: SiteContent,
+  title: string,
+  description: string,
+  path: string,
+): Metadata {
+  return pageMetadata({
+    title: title.trim() || content.seoTitle || content.businessName,
+    description: description.trim() || content.seoDescription,
+    path,
+  });
 }
 
 export function localBusinessJsonLd(content: SiteContent) {
@@ -44,37 +62,19 @@ export function localBusinessJsonLd(content: SiteContent) {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
     "@id": `${url}/#business`,
-    name: content.businessName,
-    alternateName: "Bump N Run",
-    description: content.seoDescription,
     url,
-    slogan: content.tagline,
-    image: `${url}/opengraph-image`,
-    address: {
-      "@type": "PostalAddress",
-      addressLocality: "Brighton",
-      addressRegion: "MI",
-      addressCountry: "US",
-    },
-    areaServed: [
-      {
-        "@type": "City",
-        name: "Brighton",
-        containedInPlace: { "@type": "State", name: "Michigan" },
-      },
-      { "@type": "AdministrativeArea", name: "Livingston County" },
-      { "@type": "AdministrativeArea", name: "Washtenaw County" },
-      { "@type": "AdministrativeArea", name: "Southeast Michigan" },
-    ],
-    knowsAbout: [
-      "Golf club repair",
-      "Golf club regripping",
-      "Mobile golf repair",
-      "Loft and lie adjustment",
-    ],
-    hasOfferCatalog: {
+  };
+
+  if (hasText(content.businessName)) jsonLd.name = content.businessName;
+  if (hasText(content.seoDescription)) jsonLd.description = content.seoDescription;
+  if (hasText(content.tagline)) jsonLd.slogan = content.tagline;
+  if (hasText(content.location.serviceArea)) {
+    jsonLd.areaServed = content.location.serviceArea;
+  }
+  if (content.services.length) {
+    jsonLd.hasOfferCatalog = {
       "@type": "OfferCatalog",
-      name: "Golf club repair services",
+      name: content.servicesPage.title || content.businessName,
       itemListElement: content.services.map((service) => ({
         "@type": "Offer",
         itemOffered: {
@@ -83,8 +83,8 @@ export function localBusinessJsonLd(content: SiteContent) {
           description: service.description,
         },
       })),
-    },
-  };
+    };
+  }
 
   if (content.contact.phone) jsonLd.telephone = telephoneUri(content.contact.phone);
   if (content.contact.email) jsonLd.email = content.contact.email;

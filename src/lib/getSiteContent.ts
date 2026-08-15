@@ -1,6 +1,6 @@
 import { cache } from "react";
 import type { SiteContent } from "./content";
-import { defaultContent } from "./content";
+import { emptyContent } from "./content";
 
 function withoutNulls<T extends Record<string, unknown>>(
   value: T | null | undefined,
@@ -16,7 +16,7 @@ export const getSiteContent = cache(async (): Promise<SiteContent> => {
   const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET ?? "production";
 
   if (!projectId) {
-    return defaultContent;
+    return emptyContent;
   }
 
   try {
@@ -49,11 +49,16 @@ export const getSiteContent = cache(async (): Promise<SiteContent> => {
           body,
           closer
         },
+        "servicesPage": *[_type == "servicesPage"][0]{
+          title,
+          intro
+        },
         "services": *[_type == "serviceItem"] | order(order asc) {
           title,
           description
         },
         "contact": *[_type == "contactPage"][0]{
+          title,
           intro,
           phone,
           email,
@@ -65,6 +70,10 @@ export const getSiteContent = cache(async (): Promise<SiteContent> => {
           body,
           comingSoon
         },
+        "privacy": *[_type == "privacyPage"][0]{
+          title,
+          body
+        },
         "quips": *[_type == "gameQuips"] {
           faultType,
           quips
@@ -75,39 +84,47 @@ export const getSiteContent = cache(async (): Promise<SiteContent> => {
     );
 
     if (!data) {
-      return defaultContent;
+      return emptyContent;
     }
 
     const services = (data.services ?? []).filter(
-      (item) => item?.title && item?.description,
+      (item) => item?.title || item?.description,
     );
     const quips = (data.quips ?? []).filter(
       (item) => item?.faultType && item?.quips?.length,
     );
 
     return {
-      ...defaultContent,
+      ...emptyContent,
       ...withoutNulls(data as Record<string, unknown>),
       location: {
-        ...defaultContent.location,
+        ...emptyContent.location,
         ...withoutNulls(data.location as Record<string, unknown> | undefined),
       },
       about: {
-        ...defaultContent.about,
+        ...emptyContent.about,
         ...withoutNulls(data.about as Record<string, unknown> | undefined),
       },
+      servicesPage: {
+        ...emptyContent.servicesPage,
+        ...withoutNulls(data.servicesPage as Record<string, unknown> | undefined),
+      },
       contact: {
-        ...defaultContent.contact,
+        ...emptyContent.contact,
         ...withoutNulls(data.contact as Record<string, unknown> | undefined),
       },
       merch: {
-        ...defaultContent.merch,
+        ...emptyContent.merch,
         ...withoutNulls(data.merch as Record<string, unknown> | undefined),
       },
-      services: services.length ? services : defaultContent.services,
-      quips: quips.length ? quips : defaultContent.quips,
+      privacy: {
+        ...emptyContent.privacy,
+        ...withoutNulls(data.privacy as Record<string, unknown> | undefined),
+      },
+      services,
+      quips,
     };
   } catch {
-    return defaultContent;
+    return emptyContent;
   }
 });

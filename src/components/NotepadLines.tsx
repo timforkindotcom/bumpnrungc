@@ -11,7 +11,7 @@ export function NotepadParagraph({ text }: { text: string }) {
       {blocks.map((block, bi) => (
         <p
           key={bi}
-          className="notepad-paragraph mb-2 text-sm text-ink"
+          className="notepad-paragraph text-lg text-ink"
         >
           {block}
         </p>
@@ -21,7 +21,7 @@ export function NotepadParagraph({ text }: { text: string }) {
 }
 
 export function NotepadRow({ children, className = "" }: { children: ReactNode; className?: string }) {
-  return <div className={`notepad-line text-sm ${className}`.trim()}>{children}</div>;
+  return <div className={`notepad-line text-base ${className}`.trim()}>{children}</div>;
 }
 
 export function NotepadBlank({ count = 1 }: { count?: number }) {
