@@ -40,7 +40,7 @@ export function SiteBottomNav({
         }}
         className={
           featuredTab
-            ? `font-label mx-1 rounded-md px-3 py-2.5 text-center text-[11px] font-bold leading-tight uppercase shadow-[0_2px_0_rgba(0,0,0,0.25)] sm:px-4 sm:text-xs ${
+            ? `font-label rounded-md px-2 py-1.5 text-center text-[11px] font-bold leading-tight uppercase shadow-[0_2px_0_rgba(0,0,0,0.25)] sm:mx-1 sm:px-4 sm:py-2.5 sm:text-xs ${
                 isActive
                   ? "bg-[#e6b82e] text-ink"
                   : "bg-[#f2c94c] text-ink hover:bg-[#ffd65a]"
@@ -52,7 +52,18 @@ export function SiteBottomNav({
               }`
         }
       >
-        {tab.label}
+        {featuredTab ? (
+          <span className="flex flex-col items-center leading-[1.15] sm:inline sm:leading-tight">
+            {tab.label.split(/\s+/).map((word, index) => (
+              <span key={`${tab.id}-${word}`}>
+                {index > 0 ? <span className="hidden sm:inline"> </span> : null}
+                {word}
+              </span>
+            ))}
+          </span>
+        ) : (
+          tab.label
+        )}
       </Link>
     );
   };
