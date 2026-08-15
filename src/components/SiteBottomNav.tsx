@@ -40,7 +40,7 @@ export function SiteBottomNav({
         }}
         className={
           featuredTab
-            ? `font-label mx-1 rounded-md px-3 py-2.5 text-center text-[11px] leading-tight uppercase shadow-[0_2px_0_rgba(0,0,0,0.25)] sm:px-4 sm:text-xs ${
+            ? `font-label mx-1 rounded-md px-3 py-2.5 text-center text-[11px] font-bold leading-tight uppercase shadow-[0_2px_0_rgba(0,0,0,0.25)] sm:px-4 sm:text-xs ${
                 isActive
                   ? "bg-[#e6b82e] text-ink"
                   : "bg-[#f2c94c] text-ink hover:bg-[#ffd65a]"
