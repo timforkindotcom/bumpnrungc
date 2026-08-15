@@ -12,9 +12,9 @@ import {
 
 export const SITE_TABS = [
   { id: "location", href: "/location" },
-  { id: "services", href: "/services" },
-  { id: "contact", href: "/contact", featured: true },
   { id: "about", href: "/about" },
+  { id: "contact", href: "/contact", featured: true },
+  { id: "services", href: "/services" },
   { id: "merch", href: "/merch" },
 ] as const;
 
@@ -38,12 +38,11 @@ export function getVisibleTabs(content: SiteContent): VisibleTab[] {
     });
   }
 
-  const servicesLabel = servicesTitle(content);
-  if (hasServices(content) && hasText(servicesLabel)) {
+  if (hasAbout(content) && hasText(content.about.title)) {
     tabs.push({
-      id: "services",
-      href: "/services",
-      label: servicesLabel,
+      id: "about",
+      href: "/about",
+      label: content.about.title,
     });
   }
 
@@ -57,11 +56,12 @@ export function getVisibleTabs(content: SiteContent): VisibleTab[] {
     });
   }
 
-  if (hasAbout(content) && hasText(content.about.title)) {
+  const servicesLabel = servicesTitle(content);
+  if (hasServices(content) && hasText(servicesLabel)) {
     tabs.push({
-      id: "about",
-      href: "/about",
-      label: content.about.title,
+      id: "services",
+      href: "/services",
+      label: servicesLabel,
     });
   }
 
