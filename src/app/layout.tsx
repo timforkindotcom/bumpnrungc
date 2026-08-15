@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Script from "next/script";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import { hasText } from "@/lib/content";
 import { getSiteContent } from "@/lib/getSiteContent";
@@ -80,6 +81,7 @@ export default async function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
         {children}
+        <Analytics />
         {loadGa ? (
           <>
             <Script
