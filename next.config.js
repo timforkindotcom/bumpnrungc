@@ -12,9 +12,11 @@ const nextConfig = {
   async headers() {
     const longCache = "public, max-age=31536000, immutable";
     const revalidate = "public, max-age=0, must-revalidate";
-    // .unityweb = gzip bytes that Unity unpacks itself — do NOT set Content-Encoding.
-    const unityBin = [
-      { key: "Content-Type", value: "application/octet-stream" },
+    // .unityweb files are gzip on disk. Tell the browser so it unzips with
+    // built-in code (fast on phones) instead of Unity's JavaScript unzip.
+    const gzipUnity = (type) => [
+      { key: "Content-Type", value: type },
+      { key: "Content-Encoding", value: "gzip" },
       { key: "Cache-Control", value: longCache },
     ];
 
@@ -25,22 +27,15 @@ const nextConfig = {
       },
       {
         source: "/unity/Build/:file.wasm.unityweb",
-        headers: unityBin,
+        headers: gzipUnity("application/wasm"),
       },
       {
         source: "/unity/Build/:file.framework.js.unityweb",
-        headers: [
-          { key: "Content-Type", value: "application/javascript" },
-          { key: "Cache-Control", value: longCache },
-        ],
+        headers: gzipUnity("application/javascript"),
       },
       {
         source: "/unity/Build/:file.data.unityweb",
-        headers: unityBin,
-      },
-      {
-        source: "/unity/Build/:file.unityweb",
-        headers: unityBin,
+        headers: gzipUnity("application/octet-stream"),
       },
       // Legacy .gz builds (Content-Encoding required)
       {

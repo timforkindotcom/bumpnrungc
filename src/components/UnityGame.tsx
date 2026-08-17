@@ -424,6 +424,33 @@ export function UnityGame() {
     setCanBoot(true);
   }, []);
 
+  // While the Play button is on screen, pull the tiny loader (~40KB) so Play
+  // can start the big download right away. Do not fetch the hole itself.
+  useEffect(() => {
+    if (!showPlayGate) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const manRes = await fetch(`${UNITY_BASE}/build.json?ts=${Date.now()}`, {
+          cache: "no-store",
+        });
+        if (!manRes.ok || cancelled) return;
+        const man = (await manRes.json()) as BuildManifest;
+        if (!man.loader || cancelled) return;
+        const bust = man.v || String(Date.now());
+        const loaderPath = man.loader.startsWith("/")
+          ? man.loader
+          : `${UNITY_BASE}/${man.loader}`;
+        await loadScript(withBust(loaderPath, bust));
+      } catch {
+        /* boot() loads the script again if this fails */
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [showPlayGate]);
+
   useEffect(() => {
     if (!canBoot) return;
 
@@ -639,14 +666,7 @@ export function UnityGame() {
   return (
     <div ref={hostRef} className="absolute inset-0 overflow-hidden bg-black">
       {showPlayGate && !ready && !error && (
-        <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-4 bg-forest px-6 text-center">
-          <p className="font-display text-4xl leading-none text-cream">
-            Bump N Run
-          </p>
-          <p className="font-body max-w-sm text-base leading-relaxed text-cream/75">
-            The hole is a big download. Tap Play when you’re ready — or use
-            the menu below to book.
-          </p>
+        <div className="absolute inset-0 z-10 flex items-center justify-center bg-forest">
           <button
             type="button"
             onClick={onStartPlay}

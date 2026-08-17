@@ -1,12 +1,12 @@
-/** True on iPhone / iPad / Android phones — Safari URL-bar tricks need a locked canvas. */
+/** True on phones and tablets — do not auto-start the Unity hole. */
 export function isPhoneLike(): boolean {
   if (typeof window === "undefined" || typeof navigator === "undefined") {
-    return false;
+    return true;
   }
   const ua = navigator.userAgent || "";
-  if (/iPhone|iPod/i.test(ua)) return true;
-  if (/iPad/i.test(ua)) return true;
+  if (/iPhone|iPod|iPad|Android/i.test(ua)) return true;
   if (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1) return true;
-  if (/Android/i.test(ua) && /Mobile/i.test(ua)) return true;
+  if (navigator.maxTouchPoints > 1 && window.innerWidth < 900) return true;
+  if (window.matchMedia("(pointer: coarse)").matches) return true;
   return false;
 }
