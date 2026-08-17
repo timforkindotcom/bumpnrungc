@@ -36,8 +36,6 @@ type HomeClientProps = {
 
 export function HomeClient({ content }: HomeClientProps) {
   const [activeTab, setActiveTab] = useState<TabId>(null);
-  // Phones never load the 78MB hole — that is what was crashing Safari.
-  const [loadGame, setLoadGame] = useState(false);
   const visibleIds = useMemo(
     () => new Set(getVisibleTabs(content).map((tab) => tab.id)),
     [content],
@@ -103,10 +101,6 @@ export function HomeClient({ content }: HomeClientProps) {
   }, []);
 
   useEffect(() => {
-    setLoadGame(!isPhoneLike());
-  }, []);
-
-  useEffect(() => {
     if (!activeTab) return;
     document.getElementById("unity-canvas")?.blur();
   }, [activeTab]);
@@ -125,7 +119,7 @@ export function HomeClient({ content }: HomeClientProps) {
           activeTab ? "pointer-events-none" : ""
         }`}
       >
-        {loadGame ? <UnityGame /> : <div className="absolute inset-0 bg-forest" />}
+        <UnityGame />
       </div>
 
       <BottomTabs content={content} activeTab={activeTab} onSelect={openTab} />

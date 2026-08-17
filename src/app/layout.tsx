@@ -1,14 +1,10 @@
 import type { Metadata } from "next";
 import Script from "next/script";
-import { headers } from "next/headers";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import { hasText } from "@/lib/content";
 import { getSiteContent } from "@/lib/getSiteContent";
 import { getSiteUrl, localBusinessJsonLd, shareImages } from "@/lib/site";
-
-const MOBILE_UA =
-  /iPhone|iPad|iPod|Android|Mobile|FBAN|FBAV|Instagram|CriOS|FxiOS|EdgiOS/i;
 
 /** Pull fresh Sanity copy on each visit so Publish shows right away. */
 export const dynamic = "force-dynamic";
@@ -71,21 +67,15 @@ export default async function RootLayout({
     Boolean(gaId) &&
     process.env.NODE_ENV === "production" &&
     /^G-[A-Z0-9]+$/i.test(gaId ?? "");
-  const ua = (await headers()).get("user-agent") ?? "";
-  const isMobile = MOBILE_UA.test(ua);
-
   return (
     <html lang="en" className="h-full">
       <head>
-        {/* Skip Adobe fonts on phones — extra files can stall a weak browser. */}
-        {isMobile ? null : (
-          <link rel="stylesheet" href="https://use.typekit.net/nma7fmi.css" />
-        )}
+        <link rel="preconnect" href="https://use.typekit.net" />
+        <link rel="preconnect" href="https://p.typekit.net" />
+        <link rel="stylesheet" href="https://use.typekit.net/nma7fmi.css" />
       </head>
       <body className="h-full antialiased font-body">
-        {isMobile ? null : (
-          <Script src="/bnr-keyboard.js" strategy="beforeInteractive" />
-        )}
+        <Script src="/bnr-keyboard.js" strategy="beforeInteractive" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
