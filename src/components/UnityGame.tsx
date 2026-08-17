@@ -365,8 +365,12 @@ export function UnityGame() {
   const [missing, setMissing] = useState(false);
   const [stalled, setStalled] = useState(false);
   const [retryKey, setRetryKey] = useState(0);
+  /** Phones wait for a tap so a text-message browser doesn’t download 78MB and crash. */
+  const [canBoot, setCanBoot] = useState(!!shared.instance);
+  const [showPlayGate, setShowPlayGate] = useState(false);
 
   useEffect(() => {
+    if (!canBoot && !ready) return;
     const host = hostRef.current;
     if (!host) return;
     const canvas = getPersistentCanvas();
@@ -405,9 +409,24 @@ export function UnityGame() {
       window.removeEventListener("resize", relayout);
       ro.disconnect();
     };
-  }, [ready]);
+  }, [ready, canBoot]);
 
   useEffect(() => {
+    if (shared.instance) {
+      setCanBoot(true);
+      setShowPlayGate(false);
+      return;
+    }
+    if (isPhoneLike()) {
+      setShowPlayGate(true);
+      return;
+    }
+    setCanBoot(true);
+  }, []);
+
+  useEffect(() => {
+    if (!canBoot) return;
+
     let alive = true;
     let stallTimer: ReturnType<typeof setInterval> | undefined;
     let lastProgress = shared.progress;
@@ -580,10 +599,14 @@ export function UnityGame() {
       // Do NOT Quit here — React Strict Mode remounts in dev and would kill a
       // half-finished 60MB download. Quit on real page leave instead.
     };
-  }, [retryKey]);
+  }, [retryKey, canBoot]);
 
   useEffect(() => {
-    const quit = () => {
+    const quit = (event: PageTransitionEvent) => {
+      // iPhone Safari fires pagehide when you switch apps or hide the URL bar.
+      // Quitting there looks like the site “kicked you out.”
+      if (isPhoneLike()) return;
+      if (event.persisted) return;
       const inst = shared.instance;
       shared.instance = null;
       shared.promise = null;
@@ -608,9 +631,32 @@ export function UnityGame() {
 
   const pct = Math.round(progress * 100);
 
+  const onStartPlay = () => {
+    setShowPlayGate(false);
+    setCanBoot(true);
+  };
+
   return (
     <div ref={hostRef} className="absolute inset-0 overflow-hidden bg-black">
-      {!ready && !missing && !error && (
+      {showPlayGate && !ready && !error && (
+        <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-4 bg-forest px-6 text-center">
+          <p className="font-display text-4xl leading-none text-cream">
+            Bump N Run
+          </p>
+          <p className="font-body max-w-sm text-base leading-relaxed text-cream/75">
+            The hole is a big download. Tap Play when you’re ready — or use
+            the menu below to book.
+          </p>
+          <button
+            type="button"
+            onClick={onStartPlay}
+            className="font-label rounded-md bg-[#f2c94c] px-8 py-3 text-xs font-bold uppercase text-ink shadow-[0_2px_0_rgba(0,0,0,0.25)]"
+          >
+            Play
+          </button>
+        </div>
+      )}
+      {!ready && !missing && !error && canBoot && (
         <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-3 bg-forest/92 px-6">
           <p className="font-label text-base uppercase text-cream/85">
             One moment…
